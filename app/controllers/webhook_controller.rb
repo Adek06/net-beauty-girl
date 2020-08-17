@@ -12,7 +12,7 @@ class WebhookController < ApiController
             return '404'
         end
 
-        twitter = Twitter.new
+        twitter = Twitter.new @@TWITTER_HEADER
         begin
             text = params['message']['text']
             t_api = twitter.gen_img_api text
@@ -47,6 +47,7 @@ class WebhookController < ApiController
         tele_json['chat_id'] = '-1001251893052'
         send_photos tele_json
         p "send to #{tele_json['chat_id']}"
+        "ok"
     end
 
     def get_update()
@@ -64,18 +65,22 @@ class WebhookController < ApiController
     end
 
     def api_config()
-        "https://api.telegram.org/bot" + BOT_TOKEN
+        "https://api.telegram.org/bot" + @@BOT_TOKEN
     end
 end
 
 class Twitter
+    def initialize(headers)
+        @TWITTER_HEADER = headers
+    end
+
     def gen_img_api(url)
         t_id = url.split("/")[-1]
         return "https://api.twitter.com/2/timeline/conversation/#{t_id}.json", t_id
     end
 
     def get_twitter_json(url)
-        res = HTTP.headers(TWITTER_HEADER).get(url)
+        res = HTTP.headers(@TWITTER_HEADER).get(url)
         res.body
     end
 
