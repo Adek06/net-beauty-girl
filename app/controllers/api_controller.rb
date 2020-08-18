@@ -10,4 +10,6 @@ class ApiController < ActionController::API
     else
       @@TWITTER_HEADER = {"Cookie": '', "x-csrf-token": '', "authorization": ''}
     end
+
+    @@USERNAME = ENV['USERNAME']
 end
