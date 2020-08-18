@@ -1,0 +1,2 @@
+class GirlPhotoPost < ApplicationRecord
+end
