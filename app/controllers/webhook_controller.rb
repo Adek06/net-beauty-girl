@@ -23,25 +23,27 @@ def download_from_twitter(twitter_header, params)
     return '404'
   end
 
-  twitter = Twitter.new twitter_header
-  begin
-    url = text.split('?')[0]
-    t_api, t_id = twitter.gen_img_api url
-  rescue NoMethodError
-    p "get api from #{text} error"
-    return '404'
-  end
-  res = twitter.get_twitter_json t_api
-  begin
-    imgs = twitter.get_imgs_from_tw_json JSON.parse(res), t_id
-  rescue NoMethodError
-    p "get imgs from #{text} error"
-    return '404'
-  end
+  url = text.split('?')[0]
+  record = GirlPhotoPost.find_by_url url
+  if not record
+    twitter = Twitter.new twitter_header
+    begin
+      t_api, t_id = twitter.gen_img_api url
+    rescue NoMethodError
+      p "get api from #{text} error"
+      return '404'
+    end
+    res = twitter.get_twitter_json t_api
+    begin
+      imgs = twitter.get_imgs_from_tw_json JSON.parse(res), t_id
+    rescue NoMethodError
+      p "get imgs from #{text} error"
+      return '404'
+    end
 
-  content = twitter.get_text_from_twitter_json JSON.parse(res), t_id
-
-  record = GirlPhotoPost.create(url: url, imgs: imgs, content: content, isPush: false)
+    content = twitter.get_text_from_twitter_json JSON.parse(res), t_id
+    record = GirlPhotoPost.create(url: url, imgs: imgs, content: content, isPush: false)
+  end
 
   # send to myself
   media = Array.new()
