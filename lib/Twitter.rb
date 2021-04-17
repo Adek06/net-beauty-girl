@@ -5,7 +5,7 @@ class Twitter
 
     def gen_img_api(url)
         t_id = url.split("/")[-1]
-        return "https://api.twitter.com/2/timeline/conversation/#{t_id}.json", t_id
+        ["https://api.twitter.com/2/timeline/conversation/#{t_id}.json", t_id]
     end
 
     def get_twitter_json(url)
@@ -13,8 +13,7 @@ class Twitter
         res.body
     end
 
-    def get_imgs_from_tw_json(tw_json, t_id)
-        # p tw_json
+    def get_images_from_tw_json(tw_json, t_id)
         medias = tw_json["globalObjects"]["tweets"]["#{t_id}"]["extended_entities"]["media"]
         images = Array.new()
         medias.each do |media|
@@ -24,7 +23,6 @@ class Twitter
     end
 
     def get_text_from_twitter_json(tw_json, t_id)
-        # p tw_json["globalObjects"]["tweets"]["#{t_id}"]['text']
         tw_json["globalObjects"]["tweets"]["#{t_id}"]['text']
     end 
 end
