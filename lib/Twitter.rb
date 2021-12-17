@@ -14,7 +14,10 @@ class Twitter
     end
 
     def get_images_from_tw_json(tw_json, t_id)
-        medias = tw_json["globalObjects"]["tweets"]["#{t_id}"]["extended_entities"]["media"]
+        if tw_json == nil or tw_json['globalObjects'] == nil or tw_json["globalObjects"]["tweets"]["#{t_id}"]["extended_entities"]
+            raise NoMethodError(), "#{tw_json}"
+        end
+        tw = tw_json["globalObjects"]["tweets"]["#{t_id}"]["extended_entities"]["media"]
         images = Array.new()
         medias.each do |media|
             images.push media['media_url']
