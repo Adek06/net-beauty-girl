@@ -11,7 +11,7 @@ module WebhookUtils
     end
 
     images = twitter.get_images_from_tw_json res_json, t_id
-    content = twitter.get_text_from_twitter_json JSON.parse(res), t_id
+    content = twitter.get_text_from_twitter_json res_json, t_id
     [images, content]
   end
 
